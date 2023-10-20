@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// connect server to database
+// Connect server to database
 async function connect() {
   try {
     await mongoose.connect(dbConfig.url, {
@@ -27,7 +27,7 @@ async function connect() {
 }
 connect();
 
-// define routes
+// Define routes
 initAuthRoute(app);
 initBlogRoute(app);
 initCommentRoute(app);

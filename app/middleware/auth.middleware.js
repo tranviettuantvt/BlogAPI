@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const authConfig = require("../config/auth.config");
 const User = require("../model/user.model");
 
-// catch token expired error in verify token
+// Catch token expired error in verify token
 const catchError = (err, res) => {
   if (err instanceof jwt.TokenExpiredError) {
     return res
@@ -20,6 +20,7 @@ exports.verifyToken = (req, res, next) => {
     });
   }
 
+  // Verify accessToken
   jwt.verify(token, authConfig.secret, (err, decoded) => {
     if (err) {
       return catchError(err, res);
@@ -29,6 +30,7 @@ exports.verifyToken = (req, res, next) => {
   });
 };
 
+// Check if User is admin
 exports.isAdmin = (req, res, next) => {
   User.findById(req.userId)
     .then((user) => {

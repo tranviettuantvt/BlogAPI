@@ -8,6 +8,7 @@ module.exports = (app) => {
 
   router.post("/:blogId/comment/", verifyToken, comment.createCommentInBlog);
   router.put("/:blogId/comment/:commentId", verifyToken, comment.updateCommentInBlogbyCommentId);
+  
   router.delete(
     "/:blogId/comment/:commentId",
     verifyToken,

@@ -21,6 +21,7 @@ exports.createCommentInBlog = async (req, res) => {
   const userId = req.userId;
 
   try {
+    // Create new Comment and save
     const newComment = new Comment({
       content,
       blog: blogId,
@@ -30,6 +31,7 @@ exports.createCommentInBlog = async (req, res) => {
     await newComment.save();
     console.log(blogId);
 
+    // find blog and add comment into blog
     const blog = await Blog.findById(blogId);
     if (!blog) {
       return res.status(404).json("Blog not found");
@@ -47,7 +49,9 @@ exports.updateCommentInBlogbyCommentId = async (req, res) => {
   const { commentId } = req.params;
   const userId = req.userId;
   const {content}=req.body
+
   try {
+    // Find Comment need to be updated
     const newComment = await Comment.findById(commentId);
     if (!newComment) {
       return res.status(404).send({
@@ -55,14 +59,15 @@ exports.updateCommentInBlogbyCommentId = async (req, res) => {
       });
     }
 
+    // Check if Comment belongs to User
     if (newComment.author.toString() !== userId) {
       return res.status(403).json({
         message: "Access denied. You can only update your own comments.",
       });
     }
 
+    // Update Comment and save
     newComment.content = content;
-
     await newComment.save();
 
     res.send({ message: "Comment was updated successfully" });
@@ -76,11 +81,13 @@ exports.deleteCommentInBlogByCommentId = async (req, res) => {
   const userId = req.userId;
 
   try {
+    // Find Comment need to be updated
     const comment = await Comment.findById(commentId);
     if (!comment) {
       return res.status(404).json({ message: "Comment not found" });
     }
 
+    // Check if Comment belongs to User
     if (comment.author.toString() !== userId) {
       return res
         .status(403)
@@ -89,6 +96,7 @@ exports.deleteCommentInBlogByCommentId = async (req, res) => {
         });
     }
 
+    // Find Blog and remove this Comment out of Blog
     const blogId = comment.blog;
     const blog = await Blog.findById(blogId);
     if (blog) {
@@ -96,6 +104,7 @@ exports.deleteCommentInBlogByCommentId = async (req, res) => {
       await blog.save();
     }
 
+    // Remove Comment itself
     await Comment.findByIdAndRemove(commentId);
 
     res.status(204).send("Delete Successfully");

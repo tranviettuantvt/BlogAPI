@@ -1,3 +1,4 @@
 module.exports = {
-    secret: "tranviettuan-tvt"
+    secret: "tranviettuan-tvt",
+    refreshSecret:"tvt-tvt-tvt"
   };
